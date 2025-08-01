@@ -1,0 +1,39 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Crypto Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Live Crypto Prices</h1>
+  <div id="prices">
+    <p>Bitcoin (BTC): <span id="btc">Loading...</span></p>
+    <p>Ethereum (ETH): <span id="eth">Loading...</span></p>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+body {
+  font-family: Arial;
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding-top: 3rem;
+}
+async function getPrices() {
+  const url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd";
+
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+
+    document.getElementById("btc").textContent = "$" + data.bitcoin.usd;
+    document.getElementById("eth").textContent = "$" + data.ethereum.usd;
+  } catch (err) {
+    console.error("Error fetching prices:", err);
+  }
+}
+
+getPrices();
+setInterval(getPrices, 30000); // update every 30 seconds
